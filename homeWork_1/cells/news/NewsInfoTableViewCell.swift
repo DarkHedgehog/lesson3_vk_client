@@ -64,12 +64,12 @@ class NewsInfoTableViewCell: UITableViewCell {
         labelDate.text = feed.getFeedDate()
         labelText.text = feed.feedText
         
-        imageViewGroup.sd_setImage(with: URL(string: feed.sourceUrl), placeholderImage: UIImage(named: "noPhoto"))
+        imageViewGroup.sd_setImage(with: URL(string: feed.sourceUrl), placeholderImage: UIImage.vkImage.noPhotoImage)
         
         if feed.attachments.count > 0 {
             imageHeightConstraint.constant = self.frame.width * CGFloat(feed.attachments[0].height) / CGFloat(feed.attachments[0].width)
             
-            imageNew.sd_setImage(with: URL(string: feed.attachments[0].imageUrl), placeholderImage: UIImage(named: "noPhoto"))
+            imageNew.sd_setImage(with: URL(string: feed.attachments[0].imageUrl), placeholderImage: UIImage.vkImage.noPhotoImage)
         } else {
             imageHeightConstraint.constant = 0
         }

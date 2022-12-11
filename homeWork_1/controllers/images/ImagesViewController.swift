@@ -60,7 +60,7 @@ class ImagesViewController: UIViewController {
         for (i, photo) in photos.enumerated() {
             let imageView = UIImageView()
             imageView.frame = CGRect(x: width * CGFloat(i), y: 0, width: width, height: height)
-            imageView.sd_setImage(with: URL(string: photo.photoBig), placeholderImage: UIImage(named: "noPhoto"))
+            imageView.sd_setImage(with: URL(string: photo.photoBig), placeholderImage: UIImage.vkImage.noPhotoImage)
             imageView.contentMode = .scaleAspectFit
             imageView.tag = i
             viewContaiter.addSubview(imageView)

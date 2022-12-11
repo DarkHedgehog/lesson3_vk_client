@@ -24,7 +24,7 @@ class CommentTableViewCell: UITableViewCell {
         labelName.text = comment.sender.getFullName()
         labelText.text = comment.text
         
-        imageViewAva.sd_setImage(with: URL(string: comment.sender.imageUrl100), placeholderImage: UIImage(named: "noPhoto"))
+        imageViewAva.sd_setImage(with: URL(string: comment.sender.imageUrl100), placeholderImage: UIImage.vkImage.noPhotoImage)
     }
 
 }

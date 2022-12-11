@@ -132,4 +132,8 @@ extension CGFloat {
     }
 }
 
-
+extension UIImage {
+    struct vkImage {
+        static let noPhotoImage = UIImage(named: "noPhoto")
+    }
+}

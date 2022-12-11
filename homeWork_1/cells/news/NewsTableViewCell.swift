@@ -125,7 +125,7 @@ class NewsTableViewCell: UITableViewCell {
         labelShare.text = feed.getStringFrom(count: feed.countReposts)
         labelComment.text = feed.getStringFrom(count: feed.countComments)
         
-        imageViewGroup.sd_setImage(with: URL(string: feed.sourceUrl), placeholderImage: UIImage(named: "noPhoto"))
+        imageViewGroup.sd_setImage(with: URL(string: feed.sourceUrl), placeholderImage: UIImage.vkImage.noPhotoImage)
         
         if feed.attachments.count > 0 {
             
@@ -133,7 +133,7 @@ class NewsTableViewCell: UITableViewCell {
             
             imageNew.pin.height(height)
             
-            imageNew.sd_setImage(with: URL(string: feed.attachments[0].imageUrl), placeholderImage: UIImage(named: "noPhoto"))
+            imageNew.sd_setImage(with: URL(string: feed.attachments[0].imageUrl), placeholderImage: UIImage.vkImage.noPhotoImage)
             
         } else {
             imageNew.pin.height(0)

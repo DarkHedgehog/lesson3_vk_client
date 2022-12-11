@@ -10,13 +10,11 @@ import UIKit
 
 class GroupViewModelFactory {
 
-    private lazy var defaultPlaceholder = UIImage(named: "noPhoto")
-
     func constructViewModel(from group: VkGroup) -> GroupViewModel {
         return GroupViewModel(name: group.name,
                               type: group.getType(),
                               member: group.is_member > 0 ? "Вы вступили" : "",
-                              placeholderImage: defaultPlaceholder,
+                              placeholderImage: UIImage.vkImage.noPhotoImage,
                               photoUrl: (group.photo.count > 0) ? URL(string: group.photoBig) : nil)
     }
 }
