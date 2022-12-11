@@ -121,7 +121,9 @@ extension FriendsViewController {
                 print(error.localizedDescription)
             }
         }
-        AlamofireService.instance.getFriends(delegate: self)
+        AlamofireAdapter.instance.getFriends { friends in
+            print(friends)
+        }
     }
     
     private func migrateFriends() {
@@ -232,17 +234,17 @@ extension FriendsViewController: FriendsViewControllerDelegate {
     
 }
 
-extension FriendsViewController: VkApiFriendsDelegate {
-    
-    func returnFriends(_ friends: [VkFriend]) {
-//        self.friends = friends
-//        self.friends.sort { ($0.last_name, $0.first_name) <
-//            ($1.last_name, $1.first_name)}
-//        setGroupedFriend()
-//        tableView.reloadData()
-    }
-    
-}
+//extension FriendsViewController: VkApiFriendsDelegate {
+//    
+//    func returnFriends(_ friends: [VkFriend]) {
+////        self.friends = friends
+////        self.friends.sort { ($0.last_name, $0.first_name) <
+////            ($1.last_name, $1.first_name)}
+////        setGroupedFriend()
+////        tableView.reloadData()
+//    }
+//    
+//}
 
 
 

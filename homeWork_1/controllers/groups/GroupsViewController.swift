@@ -182,7 +182,8 @@ extension GroupsViewController: UITableViewDelegate, UITableViewDataSource {
 extension GroupsViewController {
     
     private func getMyGroups() {
-        AlamofireService.instance.getGroups(delegate: self)
+        AlamofireAdapter.instance.getGroups { _ in
+        }
     }
     
     private func getGroups(by search: String) {
@@ -217,45 +218,26 @@ extension GroupsViewController {
     }
     
     private func leaveGroup(by gid: Int) {
-        AlamofireService.instance.leaveGroup(gid: gid, delegate: self)
-    }
-    
-    private func joinGroup(by gid: Int) {
-        AlamofireService.instance.joinGroup(gid: gid, delegate: self)
-    }
-}
+        AlamofireAdapter.instance.leaveGroup(gid) { gid, error in
+            if error == nil {
+                return
+            }
 
-extension GroupsViewController: VkApiGroupsDelegate {
-    
-    func returnJoin(_ gid: Int) {}
-    func returnJoin(_ error: String) {}
-    func returnLeave(_ error: String) {}
-    
-    func returnLeave(_ gid: Int) {
-        if let groups = groups {
-            for  group in groups {
-                if group.gid == gid {
-                    FirebaseService.instance.removeGroup(group: group)
-                    RealmWorker.instance.removeItem(group)
-                    tableView.reloadData()
-                    break
+            if let groups = self.groups {
+                for  group in groups {
+                    if group.gid == gid {
+                        FirebaseService.instance.removeGroup(group: group)
+                        RealmWorker.instance.removeItem(group)
+                        self.tableView.reloadData()
+                        break
+                    }
                 }
             }
         }
-//        tableView.reloadData()
-
     }
     
-    
-    private func deleteGroup(gid: Int, index: Int) {
-        let indexPath = IndexPath(item: index, section: 0)
-        tableView.deleteRows(at: [indexPath], with: .top)
+    private func joinGroup(by gid: Int) {
+        AlamofireAdapter.instance.joinGroup(gid) { gid, error in
+        }
     }
-    
-    
-    func returnGroups(_ groups: [VkGroup]) {}
-    
 }
-
-
-

@@ -32,7 +32,11 @@ class NewsInfoViewController: UIViewController {
     }
     
     private func prepareGetComments() {
-        AlamofireService.instance.getComments(ownerId: feed.sourceId, postId: feed.feedId, delegate: self)
+        AlamofireAdapter.instance.getComments(ownerId: feed.sourceId, postId: feed.feedId) { comments in
+            self.comments.removeAll()
+            self.comments.append(contentsOf: comments)
+            self.tableView.reloadData()
+        }
     }
     
 
@@ -84,13 +88,4 @@ extension NewsInfoViewController: UITableViewDelegate, UITableViewDataSource {
         
     }
     
-}
-
-extension NewsInfoViewController: VkApiCommentsDelegate {
-    
-    func returnComments(_ comments: [VkComment]) {
-        self.comments.removeAll()
-        self.comments.append(contentsOf: comments)
-        tableView.reloadData()
-    }
 }
