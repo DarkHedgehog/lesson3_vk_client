@@ -13,7 +13,8 @@ class SearchGroupViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
-    
+
+    private var groupViewModelFactory = GroupViewModelFactory()
     private var groups = [VkGroup]()
     
     var searchActive = false
@@ -89,7 +90,8 @@ extension SearchGroupViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyGroupCell", for: indexPath) as! MyGroupCell
         let group = groups[indexPath.row]
-        cell.load(group)
+        let viewModel = groupViewModelFactory.constructViewModel(from: group)
+        cell.load(viewModel)
         return cell
     }
     

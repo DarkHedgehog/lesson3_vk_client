@@ -16,7 +16,8 @@ class GroupsViewController: UIViewController {
     
 //    private var groups = [VkGroup]()
 //    private var filteredGroups = [VkGroup]()
-    
+
+    private var groupViewModelFactory = GroupViewModelFactory()
     //неюзаемая штука для показа возможностей
     private var groups: Results<VkGroup>?
     private var filteredGroups: Results<VkGroup>?
@@ -145,7 +146,8 @@ extension GroupsViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyGroupCell", for: indexPath) as! MyGroupCell
         let group = searchActive ? filteredGroups?[indexPath.row] : groups?[indexPath.row]
         if let group = group {
-            cell.load(group)
+            let viewModel = groupViewModelFactory.constructViewModel(from: group)
+            cell.load(viewModel)
         }
         return cell
     }
