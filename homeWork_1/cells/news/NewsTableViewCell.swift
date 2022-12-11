@@ -107,46 +107,29 @@ class NewsTableViewCell: UITableViewCell {
             .top(0).left(0).right(0).height(0.5)
     }
     
-    
-    func configure(feed: VkFeed) {
-        
-        labelDate.text = feed.getFeedDate()
-        labelFeedGroupHeader.text = feed.sourceName
-        
-        if feed.feedText.count == 0 {
-            labelText.pin.height(0)
-        } else {
-            labelText.pin.height(70)
-        }
-        
-        labelText.text = feed.feedText
-        labelLike.text = feed.getStringFrom(count: feed.countLikes)
-        labelViews.text = feed.getStringFrom(count: feed.countViews)
-        labelShare.text = feed.getStringFrom(count: feed.countReposts)
-        labelComment.text = feed.getStringFrom(count: feed.countComments)
-        
-        imageViewGroup.sd_setImage(with: URL(string: feed.sourceUrl), placeholderImage: UIImage.vkImage.noPhotoImage)
-        
-        if feed.attachments.count > 0 {
-            
-            let height = self.frame.width * CGFloat(feed.attachments[0].height) / CGFloat(feed.attachments[0].width)
-            
+    func configure(_ viewModel: NewsViewModel) {
+        labelDate.text = viewModel.date
+        labelFeedGroupHeader.text = viewModel.groupHeader
+        labelText.pin.height(viewModel.feedText.count == 0 ? 0 : 70)
+        labelText.text = viewModel.feedText
+        labelLike.text = viewModel.likesCountText
+        labelViews.text = viewModel.viewsCountText
+        labelShare.text = viewModel.sharesCountText
+        labelComment.text = viewModel.commentCountText
+
+        imageViewGroup.sd_setImage(with: viewModel.sourceUrl, placeholderImage: viewModel.placeholderImage)
+
+        if viewModel.attachmentsHeightMultipler > 0 {
+            let height = self.frame.width * viewModel.attachmentsHeightMultipler
             imageNew.pin.height(height)
-            
-            imageNew.sd_setImage(with: URL(string: feed.attachments[0].imageUrl), placeholderImage: UIImage.vkImage.noPhotoImage)
-            
+            imageNew.sd_setImage(with: viewModel.attachmentsUrls[0], placeholderImage: viewModel.placeholderImage)
         } else {
             imageNew.pin.height(0)
         }
-        
+
         setNeedsLayout()
         layoutIfNeeded()
     }
-    
-    
-
-    
-
 }
 
 

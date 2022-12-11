@@ -20,11 +20,11 @@ class CommentTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
 
-    func load(_ comment: VkComment) {
-        labelName.text = comment.sender.getFullName()
-        labelText.text = comment.text
-        
-        imageViewAva.sd_setImage(with: URL(string: comment.sender.imageUrl100), placeholderImage: UIImage.vkImage.noPhotoImage)
+    func load(_ viewModel: CommentViewModel) {
+        labelName.text = viewModel.name
+        labelText.text = viewModel.text
+        imageViewAva.sd_setImage(with: viewModel.imageUrl, placeholderImage: viewModel.placeholderImage)
     }
+
 
 }

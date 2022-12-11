@@ -13,17 +13,16 @@ class NewsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     private let refreshControl = UIRefreshControl()
     
-//    private let exampleCell = NewsTableViewCell()
+    var startFrom = ""
+
+    private var newsViewModelFactory = NewsViewModelFactory()
     private var textHeight: CGFloat = 0
     private var imageHeight: CGFloat = 0
-    
-    
     private var feeds = [VkFeed]()
-    
-    var startFrom = ""
     private var needClearNews = true
     private var isLoad = false
-    
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setObserver()
@@ -106,8 +105,13 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "NewsTableViewCell", for: indexPath) as! NewsTableViewCell
-        cell.configure(feed: feeds[indexPath.row])
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsTableViewCell", for: indexPath) as? NewsTableViewCell
+        else {
+            preconditionFailure("Error cast to NewsTableViewCell")
+        }
+        
+        var viewModel = newsViewModelFactory.constructViewModel(from: feeds[indexPath.row])
+        cell.configure(viewModel)
         cell.delegate = self
         return cell
     }

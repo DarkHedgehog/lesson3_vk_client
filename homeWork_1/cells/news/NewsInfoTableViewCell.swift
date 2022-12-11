@@ -57,29 +57,50 @@ class NewsInfoTableViewCell: UITableViewCell {
         self.layoutIfNeeded()
         //        setTaps()
     }
-    
-    
-    func load(feed: VkFeed) {
-        labelFeedGroupHeader.text = feed.sourceName
-        labelDate.text = feed.getFeedDate()
-        labelText.text = feed.feedText
-        
-        imageViewGroup.sd_setImage(with: URL(string: feed.sourceUrl), placeholderImage: UIImage.vkImage.noPhotoImage)
-        
-        if feed.attachments.count > 0 {
-            imageHeightConstraint.constant = self.frame.width * CGFloat(feed.attachments[0].height) / CGFloat(feed.attachments[0].width)
-            
-            imageNew.sd_setImage(with: URL(string: feed.attachments[0].imageUrl), placeholderImage: UIImage.vkImage.noPhotoImage)
+
+    func load(_ viewModel: NewsViewModel) {
+        labelDate.text = viewModel.date
+        labelFeedGroupHeader.text = viewModel.groupHeader
+        labelText.text = viewModel.feedText
+        imageViewGroup.sd_setImage(with: viewModel.sourceUrl, placeholderImage: viewModel.placeholderImage)
+
+        if viewModel.attachmentsUrls.count > 0 {
+            imageHeightConstraint.constant = self.frame.width * viewModel.attachmentsHeightMultipler
+            imageNew.sd_setImage(with: viewModel.attachmentsUrls[0], placeholderImage: viewModel.placeholderImage)
         } else {
             imageHeightConstraint.constant = 0
         }
+
         self.layoutIfNeeded()
-        
-        labelLike.text = feed.getStringFrom(count: feed.countLikes)
-        labelViews.text = feed.getStringFrom(count: feed.countViews)
-        labelShare.text = feed.getStringFrom(count: feed.countReposts)
-        labelComment.text = feed.getStringFrom(count: feed.countComments)
+
+        labelLike.text = viewModel.likesCountText
+        labelViews.text = viewModel.viewsCountText
+        labelShare.text = viewModel.sharesCountText
+        labelComment.text = viewModel.commentCountText
     }
+
+    
+//    func load(feed: VkFeed) {
+//        labelFeedGroupHeader.text = feed.sourceName
+//        labelDate.text = feed.getFeedDate()
+//        labelText.text = feed.feedText
+//        
+//        imageViewGroup.sd_setImage(with: URL(string: feed.sourceUrl), placeholderImage: UIImage.vkImage.noPhotoImage)
+//        
+//        if feed.attachments.count > 0 {
+//            imageHeightConstraint.constant = self.frame.width * CGFloat(feed.attachments[0].height) / CGFloat(feed.attachments[0].width)
+//            
+//            imageNew.sd_setImage(with: URL(string: feed.attachments[0].imageUrl), placeholderImage: UIImage.vkImage.noPhotoImage)
+//        } else {
+//            imageHeightConstraint.constant = 0
+//        }
+//        self.layoutIfNeeded()
+//        
+//        labelLike.text = feed.getStringFrom(count: feed.countLikes)
+//        labelViews.text = feed.getStringFrom(count: feed.countViews)
+//        labelShare.text = feed.getStringFrom(count: feed.countReposts)
+//        labelComment.text = feed.getStringFrom(count: feed.countComments)
+//    }
     
     func loadData(new: New, needPhoto: Bool) {
         buttonLike.setupView(isLiked: new.isLiked, countLikes: new.likeCount)

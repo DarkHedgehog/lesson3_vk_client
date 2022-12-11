@@ -14,7 +14,9 @@ class NewsInfoViewController: UIViewController {
 
     var feed = VkFeed()
     var comments = [VkComment]()
-    
+
+    private let newsInfoViewModelFactory = NewsViewModelFactory()
+    private let commentViewModelFactory = CommentViewModelFactory()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,11 +80,13 @@ extension NewsInfoViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "NewsInfoTableViewCell", for: indexPath) as! NewsInfoTableViewCell
-            cell.load(feed: feed)
+            let viewModel = newsInfoViewModelFactory.constructViewModel(from: feed)
+            cell.load(viewModel)
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "CommentTableViewCell", for: indexPath) as! CommentTableViewCell
-            cell.load(comments[indexPath.row])
+            let viewModel = commentViewModelFactory.constructViewModel(from: comments[indexPath.row])
+            cell.load(viewModel)
             return cell
         }
         
