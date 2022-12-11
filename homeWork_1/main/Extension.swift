@@ -119,6 +119,13 @@ extension UIColor {
     }
 }
 
+extension UIFont {
+    struct vkFont {
+        static let fontNormal = UIFont(name: "HelveticaNeue", size: 17) ?? UIFont()
+        static let fontSelect = UIFont(name: "HelveticaNeue-Medium", size: 17) ?? UIFont()
+    }
+}
+
 extension CGFloat {
     func toRadians() -> CGFloat {
         return self * .pi / 180.0

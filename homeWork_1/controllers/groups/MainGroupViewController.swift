@@ -27,9 +27,7 @@ class MainGroupViewController: UIViewController {
         self.add(childViewController: vc)
         return vc as! SearchGroupViewController
     }()
-    
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
@@ -39,35 +37,27 @@ class MainGroupViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
     }
-    
-    
+        
     private func configureView() {
         setSegmentedControlSettings()
         add(childViewController: myGroupsViewController)
     }
     
-    
     private func setSegmentedControlSettings() {
         segmentedControl.backgroundColor = UIColor.vkColor.main
         segmentedControl.tintColor = .clear
-        
-        let fontNormal = UIFont(name: "HelveticaNeue", size: 17) ?? UIFont()
-        let fontSelect = UIFont(name: "HelveticaNeue-Medium", size: 17) ?? UIFont()
-    
+
         segmentedControl.setTitleTextAttributes([
-            NSAttributedStringKey.font: fontNormal,
+            NSAttributedStringKey.font: UIFont.vkFont.fontNormal,
             NSAttributedStringKey.foregroundColor: UIColor.lightGray
             ], for: .normal)
         
         segmentedControl.setTitleTextAttributes([
-            NSAttributedStringKey.font: fontSelect,
+            NSAttributedStringKey.font: UIFont.vkFont.fontSelect,
             NSAttributedStringKey.foregroundColor: UIColor.white
             ], for: .selected)
-        
     }
-    
-    
-    
+
     @IBAction func segmentControlDidChanged(_ sender: Any) {
         if currentSegment != segmentedControl.selectedSegmentIndex {
             currentSegment = segmentedControl.selectedSegmentIndex
