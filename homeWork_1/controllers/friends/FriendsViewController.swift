@@ -23,7 +23,8 @@ class FriendsViewController: UIViewController {
     
     
     var searchActive = false
-    
+
+    private var friendViewModelFactory = FriendViewModelFactory()
     private var selectedSection = -1
     private var selectedRow = -1
     
@@ -205,7 +206,8 @@ extension FriendsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FriendTableViewCell", for: indexPath) as! FriendTableViewCell
         let friend = searchActive ? filteredGroupedFriends[indexPath.section].friends[indexPath.row] : groupedFriends[indexPath.section].friends[indexPath.row]
-        cell.loadData(friend: friend)
+        let viewModel = friendViewModelFactory.constructViewModel(from: friend)
+        cell.load(viewModel)
         return cell
     }
     
