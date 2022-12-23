@@ -23,7 +23,8 @@ class FriendsViewController: UIViewController {
     
     
     var searchActive = false
-    
+
+    private var friendViewModelFactory = FriendViewModelFactory()
     private var selectedSection = -1
     private var selectedRow = -1
     
@@ -121,7 +122,9 @@ extension FriendsViewController {
                 print(error.localizedDescription)
             }
         }
-        AlamofireService.instance.getFriends(delegate: self)
+        AlamofireAdapter.instance.getFriends { friends in
+            print(friends)
+        }
     }
     
     private func migrateFriends() {
@@ -203,7 +206,8 @@ extension FriendsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FriendTableViewCell", for: indexPath) as! FriendTableViewCell
         let friend = searchActive ? filteredGroupedFriends[indexPath.section].friends[indexPath.row] : groupedFriends[indexPath.section].friends[indexPath.row]
-        cell.loadData(friend: friend)
+        let viewModel = friendViewModelFactory.constructViewModel(from: friend)
+        cell.load(viewModel)
         return cell
     }
     
@@ -232,17 +236,17 @@ extension FriendsViewController: FriendsViewControllerDelegate {
     
 }
 
-extension FriendsViewController: VkApiFriendsDelegate {
-    
-    func returnFriends(_ friends: [VkFriend]) {
-//        self.friends = friends
-//        self.friends.sort { ($0.last_name, $0.first_name) <
-//            ($1.last_name, $1.first_name)}
-//        setGroupedFriend()
-//        tableView.reloadData()
-    }
-    
-}
+//extension FriendsViewController: VkApiFriendsDelegate {
+//    
+//    func returnFriends(_ friends: [VkFriend]) {
+////        self.friends = friends
+////        self.friends.sort { ($0.last_name, $0.first_name) <
+////            ($1.last_name, $1.first_name)}
+////        setGroupedFriend()
+////        tableView.reloadData()
+//    }
+//    
+//}
 
 
 

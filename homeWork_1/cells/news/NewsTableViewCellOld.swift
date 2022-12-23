@@ -80,7 +80,7 @@ class NewsTableViewCellOld: UITableViewCell {
         }
         labelText.text = feed.feedText
         
-        imageViewGroup.sd_setImage(with: URL(string: feed.sourceUrl), placeholderImage: UIImage(named: "noPhoto"))
+        imageViewGroup.sd_setImage(with: URL(string: feed.sourceUrl), placeholderImage: UIImage.vkImage.noPhotoImage)
         
         if feed.attachments.count > 0 {
             imageHeightConstraint.constant = self.frame.width * CGFloat(feed.attachments[0].height) / CGFloat(feed.attachments[0].width)
@@ -90,7 +90,7 @@ class NewsTableViewCellOld: UITableViewCell {
                 if let image = image {
                     self.generateBlureImage(image)
                 } else {
-                    self.imageNew.image = UIImage(named: "noPhoto")
+                    self.imageNew.image = UIImage.vkImage.noPhotoImage
                 }
             })
         } else {

@@ -13,7 +13,8 @@ class SearchGroupViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
-    
+
+    private var groupViewModelFactory = GroupViewModelFactory()
     private var groups = [VkGroup]()
     
     var searchActive = false
@@ -89,7 +90,8 @@ extension SearchGroupViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyGroupCell", for: indexPath) as! MyGroupCell
         let group = groups[indexPath.row]
-        cell.load(group)
+        let viewModel = groupViewModelFactory.constructViewModel(from: group)
+        cell.load(viewModel)
         return cell
     }
     
@@ -121,46 +123,48 @@ extension SearchGroupViewController: UITableViewDelegate, UITableViewDataSource 
 extension SearchGroupViewController {
     
     private func getGroups(by search: String) {
-        AlamofireService.instance.searchGroups(search: search, delegate: self)
+        AlamofireAdapter.instance.search(groups: search) { groups in
+            self.groups.removeAll()
+            self.groups = groups
+            self.tableView.reloadData()
+        }
     }
     
     private func leaveGroup(by gid: Int) {
-        AlamofireService.instance.leaveGroup(gid: gid, delegate: self)
+        AlamofireAdapter.instance.leaveGroup(gid) { gid, error in
+            if error != nil {
+                print("При попытке выйти из группы произошла ошибка: \(error ?? "")")
+                return
+            }
+            for (index, group) in self.groups.enumerated() {
+                if group.gid == gid {
+                    FirebaseService.instance.removeGroup(group: group)
+                    RealmWorker.instance.removeItem(group)
+                    self.updateGroup(group: group, is_member: 0, index: index)
+                    break
+                }
+            }
+        }
     }
     
     private func joinGroup(by gid: Int) {
-        AlamofireService.instance.joinGroup(gid: gid, delegate: self)
-    }
-}
+        AlamofireAdapter.instance.joinGroup(gid) { gid, error in
+            if error != nil {
+                print("При попытке вступить в группу произошла ошибка: \(error ?? "")")
+                return
+            }
 
-extension SearchGroupViewController: VkApiGroupsDelegate {
-    
-    func returnJoin(_ gid: Int) {
-        for (index, group) in groups.enumerated() {
-            if group.gid == gid {
-                RealmWorker.instance.saveItems(items: [group], needMigrate: false, needUpdate: true)
-                FirebaseService.instance.addGroup(group: group)
-                updateGroup(group: group, is_member: 1, index: index)
-                break
+            for (index, group) in self.groups.enumerated() {
+                if group.gid == gid {
+                    _ = RealmWorker.instance.saveItems(items: [group], needMigrate: false, needUpdate: true)
+                    FirebaseService.instance.addGroup(group: group)
+                    self.updateGroup(group: group, is_member: 1, index: index)
+                    break
+                }
             }
         }
     }
-    
-    func returnJoin(_ error: String) {
-        print("При попытке вступить в группу произошла ошибка: \(error)")
-    }
-    
-    func returnLeave(_ gid: Int) {
-        for (index, group) in groups.enumerated() {
-            if group.gid == gid {
-                FirebaseService.instance.removeGroup(group: group)
-                RealmWorker.instance.removeItem(group)
-                updateGroup(group: group, is_member: 0, index: index)
-                break
-            }
-        }
-    }
-    
+
     private func updateGroup(group: VkGroup, is_member: Int, index: Int) {
         do {
             let realm = try Realm()
@@ -176,18 +180,4 @@ extension SearchGroupViewController: VkApiGroupsDelegate {
             print("Realm saveFriends error: \(error)")
         }
     }
-    
-    func returnLeave(_ error: String) {
-        print("При попытке выйти из группы произошла ошибка: \(error)")
-    }
-    
-    func returnGroups(_ groups: [VkGroup]) {
-        self.groups.removeAll()
-        self.groups = groups
-        tableView.reloadData()
-    }
-    
 }
-
-
-

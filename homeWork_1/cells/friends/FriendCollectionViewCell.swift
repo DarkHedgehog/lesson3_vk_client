@@ -14,7 +14,7 @@ class FriendCollectionViewCell: UICollectionViewCell {
     
     
     func setImage(_ byUrl: String) {
-        imageView.sd_setImage(with: URL(string: byUrl), placeholderImage: UIImage(named: "noPhoto"))
+        imageView.sd_setImage(with: URL(string: byUrl), placeholderImage: UIImage.vkImage.noPhotoImage)
     }
     
 }

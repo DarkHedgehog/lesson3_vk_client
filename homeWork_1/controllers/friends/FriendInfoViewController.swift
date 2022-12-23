@@ -38,10 +38,12 @@ class FriendInfoViewController: UIViewController {
     
     private func parseFriend() {
         self.navigationItem.title = friend.last_name + " " + friend.first_name
-        AlamofireService.instance.getPhotosBy(friend.uid, delegate: self)
-    }
-    
 
+        AlamofireAdapter.instance.getPhotosBy(friend.uid) { [weak self] photos in
+            self?.photos = photos
+            self?.collectionView.reloadData()
+        }
+    }
 }
 
 extension FriendInfoViewController {
@@ -109,15 +111,6 @@ extension FriendInfoViewController: UICollectionViewDelegate, UICollectionViewDa
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0
-    }
-    
-}
-
-extension FriendInfoViewController: VkApiPhotosDelegate {
-    
-    func returnPhotos(_ photos: [VkPhoto]) {
-        self.photos = photos
-        collectionView.reloadData()
     }
     
 }

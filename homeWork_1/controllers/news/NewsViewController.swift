@@ -13,17 +13,16 @@ class NewsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     private let refreshControl = UIRefreshControl()
     
-//    private let exampleCell = NewsTableViewCell()
+    var startFrom = ""
+
+    private var newsViewModelFactory = NewsViewModelFactory()
     private var textHeight: CGFloat = 0
     private var imageHeight: CGFloat = 0
-    
-    
     private var feeds = [VkFeed]()
-    
-    var startFrom = ""
     private var needClearNews = true
     private var isLoad = false
-    
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setObserver()
@@ -53,7 +52,17 @@ class NewsViewController: UIViewController {
     private func prepareGetFeeds(needClearNews: Bool) {
         isLoad = true
         self.needClearNews = needClearNews
-        AlamofireService.instance.getNews(startFrom: needClearNews ? "":startFrom, delegate: self)
+
+        AlamofireAdapter.instance.getNews(startFrom: needClearNews ? "" : startFrom) { feeds in
+            self.refreshControl.endRefreshing()
+            self.isLoad = false
+            if needClearNews {
+                self.feeds.removeAll()
+                self.tableView.reloadData()
+            }
+            self.feeds.append(contentsOf: feeds)
+            self.tableView.reloadData()
+        }
     }
     
     
@@ -96,8 +105,13 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "NewsTableViewCell", for: indexPath) as! NewsTableViewCell
-        cell.configure(feed: feeds[indexPath.row])
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsTableViewCell", for: indexPath) as? NewsTableViewCell
+        else {
+            preconditionFailure("Error cast to NewsTableViewCell")
+        }
+        
+        var viewModel = newsViewModelFactory.constructViewModel(from: feeds[indexPath.row])
+        cell.configure(viewModel)
         cell.delegate = self
         return cell
     }
@@ -126,41 +140,6 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource {
         return height
     }
 
-}
-
-extension NewsViewController: NewsTableViewCellDelegate {
-    func changeLike(row: Int) {
-//        news[row].changeLike()
-    }
-    
-}
-
-extension NewsViewController: VkApiFeedsDelegate {
-    
-    func returnFeeds(_ feeds: [VkFeed]) {
-//        DispatchQueue.main.async {
-//            self.refreshControl.endRefreshing()
-//            self.isLoad = false
-//            if self.needClearNews {
-//                self.feeds.removeAll()
-//                self.tableView.reloadData()
-//            }
-//            self.feeds.append(contentsOf: feeds)
-//            self.tableView.reloadData()
-//        }
-        self.refreshControl.endRefreshing()
-        isLoad = false
-        if needClearNews {
-            self.feeds.removeAll()
-            tableView.reloadData()
-        }
-        self.feeds.append(contentsOf: feeds)
-        tableView.reloadData()
-        //        self.addNewCells(array: feeds)
-
-    }
-    
-    
     private func addNewCells(array: [VkFeed]) {
         if (array.count > 0) {
             tableView.beginUpdates()
@@ -169,13 +148,19 @@ extension NewsViewController: VkApiFeedsDelegate {
                 indexPaths.append(NSIndexPath(row: row, section: 0))
             }
             feeds.append(contentsOf: array)
-            
+
             tableView.insertRows(at: indexPaths as [IndexPath], with: .automatic)
             tableView.endUpdates()
         }
     }
-    
 }
+
+extension NewsViewController: NewsTableViewCellDelegate {
+    func changeLike(row: Int) {
+//        news[row].changeLike()
+    }    
+}
+
 
 
 
