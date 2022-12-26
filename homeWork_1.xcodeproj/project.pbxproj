@@ -81,6 +81,7 @@
 		75CB0EC629467D5B007F3C52 /* NewsViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewModelFactory.swift; sourceTree = "<group>"; };
 		75CB0ECF29468843007F3C52 /* CommentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewModel.swift; sourceTree = "<group>"; };
 		75CB0ED12946884C007F3C52 /* CommentViewModelFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewModelFactory.swift; sourceTree = "<group>"; };
+		75FE2EEE295987B900C2F981 /* MyPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = MyPlayground.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		840110DF21EC364C0044AEB7 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
 		84105FB2217F173D00EEF673 /* VKApiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKApiViewController.swift; sourceTree = "<group>"; };
 		8415662C21B7916500AF9803 /* SearchGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchGroupViewController.swift; sourceTree = "<group>"; };
@@ -213,6 +214,14 @@
 			path = Comments;
 			sourceTree = "<group>";
 		};
+		75FE2EED2959879D00C2F981 /* Playground */ = {
+			isa = PBXGroup;
+			children = (
+				75FE2EEE295987B900C2F981 /* MyPlayground.playground */,
+			);
+			path = Playground;
+			sourceTree = "<group>";
+		};
 		840110DE21EC36150044AEB7 /* test */ = {
 			isa = PBXGroup;
 			children = (
@@ -318,6 +327,7 @@
 		AA5766B72160A5AD0029F786 = {
 			isa = PBXGroup;
 			children = (
+				75FE2EED2959879D00C2F981 /* Playground */,
 				AA5766C22160A5AD0029F786 /* homeWork_1 */,
 				AA5766C12160A5AD0029F786 /* Products */,
 				DB9A454896C63B692F475996 /* Pods */,
