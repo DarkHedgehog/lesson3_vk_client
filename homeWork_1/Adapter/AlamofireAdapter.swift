@@ -9,11 +9,12 @@
 import Foundation
 
 class AlamofireAdapter {
-    private let alamofireService = AlamofireService.instance
+    private let alamofireService: VkApiInterface
     static let instance = AlamofireAdapter()
 
     // MARK: - Initializers
     private init() {
+        alamofireService = AlamofireProxy(vkApiService: AlamofireService.instance)
     }
 
     // MARK: - Public methods
